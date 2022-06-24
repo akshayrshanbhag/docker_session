@@ -1,0 +1,2 @@
+docker build -f Dockerfile -t cnnmodel .
+docker run cnnmodel --batch_size 32 --epochs 10 

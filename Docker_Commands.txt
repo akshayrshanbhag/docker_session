@@ -1,0 +1,27 @@
+1. Pulling the nvidia images for PyTorch or Tensorflow as needed:
+
+docker pull nvcr.io/nvidia/pytorch:20.10-py3
+docker pull nvcr.io/nvidia/tensorflow:21.04-tf2-py3
+
+
+2. Running docker with gpu settings
+	
+docker run --gpus ['0','1','2','3']  -it --rm -v [local_dir]:[container_dir] nvcr.io/nvidia/pytorch:20.10-py3 bash
+docker run --gpus all -it --rm -v [local_dir]:[container_dir] nvcr.io/nvidia/tensorflow:21.04-tf2-py3 bash
+
+
+docker run -i -d --rm --gpus=device=0 --name tensorflow2-container --network=host -v /Users/akshay/workspace/:/workspace nvcr.io/nvidia/tensorflow:21.04-tf2-py3 bash -c "export PYTHONPATH=/workspace && python3 /workspace/training_repo/train.py .... {parameters for the training}"
+
+
+
+FROM <<Image_Name>>
+RUN apt-get update 
+RUN git clone <<repositoryurl>>.git
+RUN pip install -r requirements.txt
+WORKDIR ./workspace
+
+docker build . --network=host -t tensorflow-21.04-tf2-py3-with-requirements-and-git-repo
+
+docker run -it --rm --name tensorflow2-container --network=host tensorflow-21.04-tf2-py3-with-requirements-and-git-repo bash
+
+
